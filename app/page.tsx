@@ -15,7 +15,7 @@ interface Flashcard {
 }
 
 export default function Home() {
-  const { isSignedIn } = useUser();
+  const { } = useUser();
   // Properly type the useState
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
