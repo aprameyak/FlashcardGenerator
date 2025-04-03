@@ -16,20 +16,47 @@ export async function POST(request: Request) {
       );
     }
 
-    const systemPrompt = `Generate ${numCards} flashcards about ${topic} in this exact JSON format:
-    [
-      {
-        "id": "1",
-        "question": "Brief, clear question",
-        "answer": "Concise, accurate answer"
-      }
-    ]
-    Keep answers under 50 words. Focus on key concepts.`;
+    const systemPrompt = `Create ${numCards} high-quality flashcards about "${topic}" following these guidelines:
+
+1. Questions should:
+   - Be clear and specific
+   - Test one concept at a time
+   - Encourage critical thinking
+   - Use action words (explain, compare, analyze, define)
+   - Avoid yes/no questions
+
+2. Answers should:
+   - Be concise but complete (under 50 words)
+   - Include only essential information
+   - Use simple, clear language
+   - Include examples where helpful
+   - Focus on key concepts and understanding
+
+Format the output as a JSON array exactly like this:
+[
+  {
+    "id": "1",
+    "question": "What is the fundamental principle of [concept]?",
+    "answer": "Clear, concise explanation with key points."
+  }
+]
+
+For technical topics:
+- Include practical applications
+- Break down complex concepts
+- Use analogies when helpful
+- Cover both theory and implementation
+
+For non-technical topics:
+- Focus on main ideas and relationships
+- Include important dates, names, or terms
+- Highlight cause-and-effect relationships
+- Connect concepts to real-world examples`;
 
     const completion = await openai.completions.create({
       model: "gpt-3.5-turbo-instruct",
       prompt: systemPrompt,
-      max_tokens: 500,
+      max_tokens: 1000, 
       temperature: 0.7,
     });
 
@@ -38,9 +65,22 @@ export async function POST(request: Request) {
     
     try {
       flashcards = JSON.parse(content || '[]');
+      
+      flashcards = flashcards.map((card: any, index: number) => ({
+        id: card.id || `${index + 1}`,
+        question: card.question.trim(),
+        answer: card.answer.trim()
+      }));
+
+      flashcards = flashcards.filter((card: any) => 
+        card.question && 
+        card.answer && 
+        card.question.length > 10 && 
+        card.answer.length > 10
+      );
+
     } catch (error) {
       console.error('Error parsing OpenAI response:', error);
-      // Fallback to generate basic flashcards if parsing fails
       flashcards = Array.from({ length: numCards }, (_, i) => ({
         id: `card-${i}`,
         question: `Question ${i + 1} about ${topic}?`,
@@ -57,4 +97,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}
