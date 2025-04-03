@@ -13,7 +13,7 @@ interface Flashcard {
 }
 
 export default function Home() {
-  const { } = useUser();
+  const { user } = useUser();
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -21,109 +21,110 @@ export default function Home() {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      background: 'linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%)',
       padding: '40px 20px',
     },
     mainContent: {
-      maxWidth: '800px',
+      maxWidth: '1000px',
       margin: '0 auto',
       position: 'relative' as const,
     },
-    card: {
+    welcomeCard: {
       backgroundColor: 'white',
-      borderRadius: '15px',
-      boxShadow: '0 10px 20px rgba(0, 0, 0, 0.1)',
-      padding: '30px',
-      marginBottom: '20px',
+      borderRadius: '16px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',
+      padding: '40px',
+      textAlign: 'center' as const,
+      marginBottom: '30px',
     },
     title: {
       fontSize: '2.5rem',
       fontWeight: '700',
-      color: '#2d3748',
-      textAlign: 'center' as const,
-      marginBottom: '20px',
+      color: '#1a365d',
+      marginBottom: '16px',
+      letterSpacing: '-0.025em',
     },
     subtitle: {
-      fontSize: '1.2rem',
+      fontSize: '1.25rem',
       color: '#4a5568',
-      textAlign: 'center' as const,
-      marginBottom: '30px',
+      marginBottom: '32px',
+      lineHeight: '1.6',
     },
     buttonContainer: {
       display: 'flex',
       flexDirection: 'column' as const,
-      gap: '15px',
-      maxWidth: '300px',
+      gap: '16px',
+      maxWidth: '320px',
       margin: '0 auto',
     },
     button: {
-      width: '100%',
       padding: '12px 24px',
       fontSize: '1rem',
       fontWeight: '600',
       borderRadius: '8px',
       cursor: 'pointer',
-      transition: 'all 0.3s ease',
+      transition: 'all 0.2s ease',
+      width: '100%',
       border: 'none',
     },
     primaryButton: {
-      backgroundColor: '#4299e1',
+      backgroundColor: '#4f46e5',
       color: 'white',
-      border: 'none',
+      '&:hover': {
+        backgroundColor: '#4338ca',
+      },
     },
     secondaryButton: {
-      backgroundColor: 'transparent',
-      color: '#4299e1',
-      border: '2px solid #4299e1',
+      backgroundColor: 'white',
+      color: '#4f46e5',
+      border: '2px solid #4f46e5',
+      '&:hover': {
+        backgroundColor: '#f9fafb',
+      },
     },
-    errorContainer: {
-      backgroundColor: '#fff5f5',
-      border: '1px solid #fc8181',
-      borderRadius: '8px',
+    errorAlert: {
+      backgroundColor: '#fee2e2',
+      borderLeft: '4px solid #ef4444',
       padding: '16px',
+      borderRadius: '8px',
       marginBottom: '20px',
       display: 'flex',
       alignItems: 'center',
       gap: '12px',
     },
     errorText: {
-      color: '#c53030',
+      color: '#b91c1c',
       fontSize: '0.875rem',
-    },
-    errorIcon: {
-      width: '20px',
-      height: '20px',
-      color: '#fc8181',
-    },
-    loadingSpinner: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '20px',
     },
   };
 
   const handleCreateFlashcards = async (topic: string, numCards: number) => {
     setIsLoading(true);
     setError("");
+    
     try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
+      const response = await fetch('/api/flashcards', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ topic, numCards }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate flashcards");
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate flashcards');
       }
 
       const data = await response.json();
-      setFlashcards(data);
-    } catch (err) {
-      setError("Error generating flashcards. Please try again.");
-      console.error(err);
+      if (Array.isArray(data)) {
+        setFlashcards(data);
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred');
+      console.error('Error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -133,20 +134,21 @@ export default function Home() {
     <div style={styles.container}>
       <div style={styles.mainContent}>
         <SignedOut>
-          <div style={styles.card}>
-            <h1 style={styles.title}>Flashcard Generator</h1>
+          <div style={styles.welcomeCard}>
+            <h1 style={styles.title}>AI-Powered Flashcard Generator</h1>
             <p style={styles.subtitle}>
-              Create AI-powered flashcards instantly for better learning
+              Transform any topic into effective study materials using advanced AI technology.
+              Sign in to start creating personalized flashcards instantly.
             </p>
             <div style={styles.buttonContainer}>
               <SignInButton mode="modal">
                 <button style={{ ...styles.button, ...styles.primaryButton }}>
-                  Sign In
+                  Sign In to Get Started
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
                 <button style={{ ...styles.button, ...styles.secondaryButton }}>
-                  Sign Up
+                  Create New Account
                 </button>
               </SignUpButton>
             </div>
@@ -154,46 +156,21 @@ export default function Home() {
         </SignedOut>
 
         <SignedIn>
-          <div style={styles.card}>
+          <div style={styles.welcomeCard}>
+            <h1 style={styles.title}>Welcome, {user?.firstName || 'Student'}!</h1>
             {error && (
-              <div style={styles.errorContainer}>
-                <svg
-                  style={styles.errorIcon}
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
+              <div style={styles.errorAlert}>
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
-                <p style={styles.errorText}>{error}</p>
+                <span style={styles.errorText}>{error}</span>
               </div>
             )}
-
-            {isLoading && (
-              <div style={styles.loadingSpinner}>
-                <div style={{
-                  border: '4px solid #f3f3f3',
-                  borderTop: '4px solid #3498db',
-                  borderRadius: '50%',
-                  width: '40px',
-                  height: '40px',
-                  animation: 'spin 1s linear infinite',
-                }}>
-                </div>
-              </div>
-            )}
-
-            {!isLoading && (
-              <>
-                {flashcards.length === 0 ? (
-                  <FlashcardCreator onSubmit={handleCreateFlashcards} isLoading={isLoading} />
-                ) : (
-                  <FlashcardViewer flashcards={flashcards} onReset={() => setFlashcards([])} />
-                )}
-              </>
+            
+            {flashcards.length === 0 ? (
+              <FlashcardCreator onSubmit={handleCreateFlashcards} isLoading={isLoading} />
+            ) : (
+              <FlashcardViewer flashcards={flashcards} onReset={() => setFlashcards([])} />
             )}
           </div>
         </SignedIn>
