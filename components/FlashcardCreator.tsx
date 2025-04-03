@@ -88,7 +88,7 @@ const FlashcardCreator = ({ onSubmit, isLoading }: FlashcardCreatorProps) => {
             type="text"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            placeholder="Enter a topic (e.g., 'JavaScript Promises')"
+            placeholder="Enter a topic "
             style={styles.input}
             required
             minLength={3}
