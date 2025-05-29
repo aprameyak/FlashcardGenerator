@@ -8,11 +8,9 @@
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=for-the-badge)
 
-## What it Does  
 
 **Flashcard Generator** is an **AI-powered tool** that transforms user-provided notes into study-friendly **flashcards** using **OpenAI's GPT-3.5**. This app helps users quickly generate flashcards from their notes to aid in efficient studying and revision.
 
-## How We Built It  
 
 ### Frontend Technologies:  
 
