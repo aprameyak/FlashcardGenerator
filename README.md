@@ -12,15 +12,11 @@
 **Flashcard Generator** is an **AI-powered tool** that transforms user-provided notes into study-friendly **flashcards** using **OpenAI's GPT-3.5**. This app helps users quickly generate flashcards from their notes to aid in efficient studying and revision.
 
 
-### Frontend Technologies:  
+### Technologies:  
 
 - **ReactJS:** For building the interactive user interface.  
 - **Next.js:** For server-side rendering and efficient page routing.  
-- **TypeScript:** For a type-safe and scalable frontend codebase.
-
-### Backend Technologies:  
-
-- **TypeScript:** Used to build a robust backend for handling flashcard generation requests.  
+- **TypeScript:** Type-safe and scalable for handling flashcard generation requests.  
 - **OpenAI API (GPT-3.5):** For transforming notes into structured, question-answer flashcards.
 
 ## Features  
