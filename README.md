@@ -31,11 +31,6 @@
 - **Interactive UI:** Built with React.js and Next.js for a smooth and responsive experience.  
 - **Real-Time Processing:** Flashcards are instantly generated after submitting notes.
 
-## Integration  
-
-- **OpenAI GPT-3.5 API:** Notes are sent to OpenAI for processing into flashcards.  
-- **TypeScript Backend:** Manages the communication with the AI API and handles the logic for flashcard generation.  
-
 ## Live Deployment  
 
 - **View Here:** [Flashcard Generator](https://flashcards-dusky-nine.vercel.app/)
