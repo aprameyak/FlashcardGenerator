@@ -1,5 +1,6 @@
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Analytics } from '@vercel/analytics/next'
 
 export default function RootLayout({
   children,
@@ -13,6 +14,7 @@ export default function RootLayout({
           publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
         >
           {children}
+          <Analytics />
         </ClerkProvider>
       </body>
     </html>
