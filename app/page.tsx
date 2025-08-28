@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/clerk-react";
 import FlashcardCreator from "../components/FlashcardCreator";
 import FlashcardViewer from "../components/FlashcardViewer";
 
@@ -13,7 +11,6 @@ interface Flashcard {
 }
 
 export default function Home() {
-  const { user } = useUser();
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -133,47 +130,27 @@ export default function Home() {
   return (
     <div style={styles.container}>
       <div style={styles.mainContent}>
-        <SignedOut>
-          <div style={styles.welcomeCard}>
-            <h1 style={styles.title}>AI-Powered Flashcard Generator</h1>
-            <p style={styles.subtitle}>
-              Transform any topic into effective study materials using advanced AI technology.
-              Sign in to start creating personalized flashcards instantly.
-            </p>
-            <div style={styles.buttonContainer}>
-              <SignInButton mode="modal">
-                <button style={{ ...styles.button, ...styles.primaryButton }}>
-                  Sign In to Get Started
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button style={{ ...styles.button, ...styles.secondaryButton }}>
-                  Create New Account
-                </button>
-              </SignUpButton>
+        <div style={styles.welcomeCard}>
+          <h1 style={styles.title}>AI-Powered Flashcard Generator</h1>
+          <p style={styles.subtitle}>
+            Transform any topic into effective study materials using advanced AI technology.
+            Start creating personalized flashcards instantly.
+          </p>
+          {error && (
+            <div style={styles.errorAlert}>
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <span style={styles.errorText}>{error}</span>
             </div>
-          </div>
-        </SignedOut>
-
-        <SignedIn>
-          <div style={styles.welcomeCard}>
-            <h1 style={styles.title}>Welcome, {user?.firstName || 'Student'}!</h1>
-            {error && (
-              <div style={styles.errorAlert}>
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-                <span style={styles.errorText}>{error}</span>
-              </div>
-            )}
-            
-            {flashcards.length === 0 ? (
-              <FlashcardCreator onSubmit={handleCreateFlashcards} isLoading={isLoading} />
-            ) : (
-              <FlashcardViewer flashcards={flashcards} onReset={() => setFlashcards([])} />
-            )}
-          </div>
-        </SignedIn>
+          )}
+          
+          {flashcards.length === 0 ? (
+            <FlashcardCreator onSubmit={handleCreateFlashcards} isLoading={isLoading} />
+          ) : (
+            <FlashcardViewer flashcards={flashcards} onReset={() => setFlashcards([])} />
+          )}
+        </div>
       </div>
     </div>
   );

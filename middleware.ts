@@ -1,6 +1,7 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
-
-export default clerkMiddleware();
+// Simple middleware that just passes through requests
+export default function middleware(req: any) {
+  return req.next();
+}
 
 export const config = {
   matcher: [
