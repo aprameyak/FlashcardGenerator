@@ -1,30 +1,31 @@
-# Flashcard Generator
+# FlashcardGenerator
 
-![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white&style=for-the-badge)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white&style=for-the-badge)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB&style=for-the-badge)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
 ![OpenAI](https://img.shields.io/badge/OpenAI-412991?logo=openai&logoColor=white&style=for-the-badge)
-![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&style=for-the-badge)
-![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=for-the-badge)
+![Clerk](https://img.shields.io/badge/Clerk-6C47FF?logo=clerk&logoColor=white&style=for-the-badge)
 
+## About
 
-**Flashcard Generator** is an **AI-powered tool** that transforms user-provided notes into study-friendly **flashcards** using **OpenAI's GPT-3.5**. This app helps users quickly generate flashcards from their notes to aid in efficient studying and revision.
+**FlashcardGenerator** is an AI-powered study tool built with **Next.js** and **React** that converts user-provided notes into question-and-answer flashcards using the **OpenAI** API. Users authenticate via **Clerk**, paste or type their notes, and instantly receive a structured deck of flashcards they can flip through in an interactive viewer.
 
+## Features
 
-### Technologies:  
+- AI-generated flashcards from free-form notes via OpenAI GPT
+- Interactive flashcard viewer with flip animation
+- Clerk authentication protecting the flashcard creation flow
+- Server-side API route (`/api/flashcards`) handles all OpenAI calls
+- Clean, minimal UI focused on the study workflow
+- Vercel Analytics for usage tracking
 
-- **ReactJS:** For building the interactive user interface.  
-- **Next.js:** For server-side rendering and efficient page routing.  
-- **TypeScript:** Type-safe and scalable for handling flashcard generation requests.  
-- **OpenAI API (GPT-3.5):** For transforming notes into structured, question-answer flashcards.
+## Technology Stack
 
-## Features  
+- **Frontend**: Next.js, React, TypeScript
+- **Backend**: Next.js API Routes
+- **AI Integration**: OpenAI API
+- **Authentication**: Clerk
 
-- **AI-Powered Flashcards:** Automatically generates flashcards from user notes using GPT-3.5.  
-- **Interactive UI:** Built with React.js and Next.js for a smooth and responsive experience.  
-- **Real-Time Processing:** Flashcards are instantly generated after submitting notes.
+## Deployment
 
-## Live Deployment  
-
-- **View Here:** [Flashcard Generator](https://flashcards-dusky-nine.vercel.app/)
+Visit the live site at [https://flashcards-dusky-nine.vercel.app](https://flashcards-dusky-nine.vercel.app)
