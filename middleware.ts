@@ -1,6 +1,8 @@
+import { NextResponse } from 'next/server';
+
 // Simple middleware that just passes through requests
-export default function middleware(req: any) {
-  return req.next();
+export default function middleware() {
+  return NextResponse.next();
 }
 
 export const config = {
