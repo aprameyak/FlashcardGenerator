@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface Flashcard {
   id: string;
@@ -7,13 +7,23 @@ interface Flashcard {
   answer: string;
 }
 
-// Initialize OpenAI client only when needed
-function getOpenAIClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
+const systemInstruction = "You are an expert educator specializing in creating effective flashcards for learning. Create flashcards that promote active recall and deep understanding.";
+
+// Initialize Gemini client only when needed
+function getModel() {
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY environment variable is required');
+    throw new Error('GEMINI_API_KEY environment variable is required');
   }
-  return new OpenAI({ apiKey });
+  return new GoogleGenerativeAI(apiKey).getGenerativeModel({
+    model: "gemini-2.5-flash-lite",
+    systemInstruction,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 2000,
+      responseMimeType: "application/json",
+    },
+  });
 }
 
 export async function POST(request: Request) {
@@ -27,17 +37,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const openai = getOpenAIClient();
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert educator specializing in creating effective flashcards for learning. Create flashcards that promote active recall and deep understanding."
-        },
-        {
-          role: "user",
-          content: `Create ${numCards} high-quality flashcards about "${topic}" following these guidelines:
+    const model = getModel();
+    const result = await model.generateContent(`Create ${numCards} high-quality flashcards about "${topic}" following these guidelines:
 
 1. Questions should:
    - Be clear and specific
@@ -61,14 +62,9 @@ Format the output as a JSON array with exactly ${numCards} items like this:
     "question": "Question text here",
     "answer": "Answer text here"
   }
-]`
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 2000,
-    });
+]`);
 
-    const content = completion.choices[0].message.content;
+    const content = result.response.text();
     let flashcards: Flashcard[] = [];
     
     try {
