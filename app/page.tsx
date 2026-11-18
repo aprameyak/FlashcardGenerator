@@ -18,7 +18,7 @@ export default function Home() {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%)',
+      background: '#f2f5f9',
       padding: '40px 20px',
     },
     mainContent: {
