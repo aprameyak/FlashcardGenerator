@@ -28,4 +28,4 @@
 
 ## Deployment
 
-Visit the live site at [https://flashcards-dusky-nine.vercel.app](https://flashcards-dusky-nine.vercel.app)
+Visit the live site at [https://flashcards.aprameyak.workers.dev](https://flashcards.aprameyak.workers.dev)
