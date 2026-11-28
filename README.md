@@ -28,4 +28,4 @@
 
 ## Deployment
 
-Visit the live site at [https://flashcards.aprameyak.workers.dev](https://flashcards.aprameyak.workers.dev)
+Visit the live site at [https://flashcards.aprameyakannan.com](https://flashcards.aprameyakannan.com)
